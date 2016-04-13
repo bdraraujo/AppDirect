@@ -1,6 +1,6 @@
 package com.acme.rest;
 
-import com.acme.rest.types.NotifyResponse;
+import com.acme.types.NotifyResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;

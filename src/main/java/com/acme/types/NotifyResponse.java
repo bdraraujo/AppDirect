@@ -1,4 +1,4 @@
-package com.acme.rest.types;
+package com.acme.types;
 
 /**
  * Created by bdraraujo on 16-04-12.

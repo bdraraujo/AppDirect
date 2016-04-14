@@ -13,7 +13,7 @@ import java.util.Arrays;
  * Created by bdraraujo on 16-04-12.
  */
 @ComponentScan("com.acme")
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.acme")
 public class Application extends SpringBootServletInitializer {
 
     @Override

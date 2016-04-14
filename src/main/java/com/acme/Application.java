@@ -5,12 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Arrays;
 
 /**
  * Created by bdraraujo on 16-04-12.
  */
+@ComponentScan("com.acme")
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 

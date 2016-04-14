@@ -5,7 +5,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>demo.Application</param-value>
+        <param-value>com.acme.Application</param-value>
     </context-param>
 
     <listener>

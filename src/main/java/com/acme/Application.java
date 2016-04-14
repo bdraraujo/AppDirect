@@ -1,11 +1,13 @@
 package com.acme;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 
@@ -13,7 +15,9 @@ import java.util.Arrays;
  * Created by bdraraujo on 16-04-12.
  */
 @ComponentScan("com.acme")
-@SpringBootApplication(scanBasePackages = "com.acme")
+@AutoConfigureBefore(org.springframework.boot.legacy.context.web.MetricFilterAutoConfiguration.class)
+@Configuration
+@EnableAutoConfiguration
 public class Application extends SpringBootServletInitializer {
 
     @Override

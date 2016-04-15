@@ -20,11 +20,11 @@ public class NotifyController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/notify")
     public NotifyResponse notify(@RequestParam(value = "url") String url) {
-        final String key = "product-1-105455";
+        final String key = "product-1-105571";
         // lPcbzdKCj8CJ5ZN9
         // TODO Call AppDirect with signed URL to get XML back
         OAuthHmacSigner signer = new OAuthHmacSigner();
-        signer.clientSharedSecret = "lPcbzdKCj8CJ5ZN9";
+        signer.clientSharedSecret = "CzHCBcYLAWMxpKJl";
 
         //URL destUrl = null;
         try {

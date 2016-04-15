@@ -22,32 +22,14 @@ public class NotifyController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/notify")
     public NotifyResponse notify(@RequestParam(value = "url") String url) {
-        final String consumerKey = "product-1-105571";
-        final String secret = "CzHCBcYLAWMxpKJl";
-        // lPcbzdKCj8CJ5ZN9
+        final String consumerKey = "Dummy"; //"product-1-105571";
+        final String secret = "secret"; //"CzHCBcYLAWMxpKJl";
+
         // TODO Call AppDirect with signed URL to get XML back
         OAuthHmacSigner signer = new OAuthHmacSigner();
-        signer.clientSharedSecret = "CzHCBcYLAWMxpKJl";
+        signer.clientSharedSecret = secret;
 
-        //URL destUrl = null;
         try {
-            //destUrl = new URL(url);
-            //HttpURLConnection request = (HttpURLConnection) destUrl.openConnection();
-            /*String signature = signer.computeSignature(url);
-            //String template = "&oauth_timestamp=%d&oauth_consumer_key=%s&oauth_signature_method=HMAC-SHA1&oauth_version=1.0&oauth_signature=%s";
-            OAuthParameters params = new OAuthParameters();
-            params.setOAuthConsumerKey(consumerKey);
-            params.setOAuthNonce(OAuthUtil.getNonce());
-            params.setOAuthTimestamp(OAuthUtil.getTimestamp());
-            params.setOAuthSignatureMethod(signer.getSignatureMethod());
-            params.setOAuthType(OAuthParameters.OAuthType.TWO_LEGGED_OAUTH);
-            params.setOAuthSignature(signature);
-            params.addCustomBaseParameter("oauth_version", "1.0");
-
-            //signer.setPrivateKey(privKey);
-            //String finalUrl = url + String.format(template, new Timestamp((new Date()).getTime()).getTime(), key, signature);
-            String baseString = OAuthUtil.encode(OAuthUtil.normalizeUrl(url)) + '&'
-                    + OAuthUtil.encode(OAuthUtil.normalizeParameters(url, params.getBaseParameters()));*/
             OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
             consumer.setSigningStrategy(new QueryStringSigningStrategy());
             String signedUrl = consumer.sign(url);

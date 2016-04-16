@@ -5,8 +5,15 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.instrument.classloading.LoadTimeWeaver;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Arrays;
 
@@ -16,6 +23,8 @@ import java.util.Arrays;
 @ComponentScan("com.acme")
 @Configuration
 @EnableAutoConfiguration
+@EnableJpaRepositories("com.acme.repository")
+@EnableTransactionManagement
 public class Application extends SpringBootServletInitializer {
 
     @Override
@@ -33,5 +42,27 @@ public class Application extends SpringBootServletInitializer {
         for (String beanName : beanNames) {
             System.out.println(beanName);
         }
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+        emf.setPersistenceUnitName("jpa.unit");
+        emf.setPackagesToScan("com.acme.types");
+        emf.setLoadTimeWeaver(loadTimeWeaverBean());
+        return emf;
+    }
+
+    @Bean
+    public LoadTimeWeaver loadTimeWeaverBean() {
+        return new org.springframework.instrument.classloading.SimpleLoadTimeWeaver();
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(
+                entityManagerFactoryBean().getObject());
+        return transactionManager;
     }
 }

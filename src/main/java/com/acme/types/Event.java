@@ -1,18 +1,25 @@
 package com.acme.types;
 
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Entity;
+import org.springframework.data.annotation.Id;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 /**
  * Created by bdraraujo on 16-04-15.
  */
 @Entity
 public class Event {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String returnUrl;
 
     private String flag;
 
-    private Key<Payload> payload;
+    private Payload payload;
 
     private String type;
 
@@ -36,11 +43,11 @@ public class Event {
         this.flag = flag;
     }
 
-    public Key<Payload> getPayload() {
+    public Payload getPayload() {
         return payload;
     }
 
-    public void setPayload(Key<Payload> payload) {
+    public void setPayload(Payload payload) {
         this.payload = payload;
     }
 

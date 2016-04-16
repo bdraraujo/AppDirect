@@ -1,11 +1,8 @@
 package com.acme.types;
 
-import com.googlecode.objectify.annotation.Entity;
-
 /**
  * Created by bdraraujo on 16-04-15.
  */
-@Entity
 public class Payload {
     private Order order;
 

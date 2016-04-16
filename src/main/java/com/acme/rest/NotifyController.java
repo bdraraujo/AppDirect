@@ -2,16 +2,18 @@ package com.acme.rest;
 
 import com.acme.types.Event;
 import com.acme.types.NotifyResponse;
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.basic.DefaultOAuthConsumer;
+
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.signature.AuthorizationHeaderSigningStrategy;
-import oauth.signpost.signature.QueryStringSigningStrategy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -32,38 +34,21 @@ public class NotifyController {
 
         try {
             String callbackUrl = url;
-            logger.info("Request Consumer Key: {} %nRequest Signature: {}", requestConsumerKey, requestSignature);
-            if (url.matches("https:\\/\\/.*-test\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummyOrder")) {
-                logger.info("AppDirect Test URL, retrieving and responding");
-
-
-            } else if (url.matches("https:\\/\\/.*\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummyOrder")) {
-                logger.info("AppDirect Production URL, validating OAuth, retrieving and responding");
-
-
-                // TODO Validate OAuth
-                OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
-                consumer.setSigningStrategy(new AuthorizationHeaderSigningStrategy());
-                String signatureForVerification = consumer.sign(url);
-                if (!signatureForVerification.equals(requestSignature)) {
-                    logger.error("Cannot verify sender, signature mismatch");
-                    return new NotifyResponse(false, "101", "Cannot verify sender, signature mismatch", accountIdentifer);
-                }
-                consumer.setSigningStrategy(new QueryStringSigningStrategy());
-                callbackUrl = consumer.sign(url);
-                logger.info("Signed URL {}", callbackUrl);
-
+            logger.info("Request Consumer Key: {} %n Request Signature: {}", requestConsumerKey, requestSignature);
+            RequestValidator requestValidator = new RequestValidator(url, requestSignature, consumerKey, secret, callbackUrl);
+            if (!requestValidator.isValid()) {
+                return new NotifyResponse(false, "101", "Cannot verify sender, signature mismatch", accountIdentifer);
             }
+            callbackUrl = requestValidator.sign();
             RestTemplate restTemplate = new RestTemplate();
 
             Event event = restTemplate.getForObject(callbackUrl, Event.class, (Object) null);
-            logger.info("Response from URL:%n{}", event.toString());
+            logger.info("Response from URL: %n {}", event.toString());
         } catch (OAuthExpectationFailedException | OAuthMessageSignerException | OAuthCommunicationException e) {
             logger.error("Error during event processing: {}", e.getLocalizedMessage(), e);
             return new NotifyResponse(false, "100", "Error during event processing", accountIdentifer);
         }
 
-        // TODO Print XML
         // Respond to caller
         return new NotifyResponse(true, null, null, accountIdentifer);
     }

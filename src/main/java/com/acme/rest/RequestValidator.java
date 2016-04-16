@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class RequestValidator {
     private static Logger logger = LoggerFactory.getLogger(RequestValidator.class);
 
-    private boolean myResult;
+    private boolean result;
     private String url;
     private String requestSignature;
     private String consumerKey;
@@ -38,7 +38,7 @@ public class RequestValidator {
     }
 
     public boolean isValid() throws OAuthMessageSignerException, OAuthExpectationFailedException, OAuthCommunicationException {
-        myResult = true;
+        result = true;
 
         if (url.matches("https:\\/\\/.*-test\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummyOrder")) {
             logger.info("AppDirect Test URL, retrieving and responding");
@@ -51,11 +51,11 @@ public class RequestValidator {
             String signatureForVerification = consumer.sign(url);
             if (!signatureForVerification.equals(requestSignature)) {
                 logger.error("Cannot verify sender, signature mismatch");
-                myResult = false;
+                result = false;
             }
         }
 
-        return myResult;
+        return result;
     }
 
     public String sign() throws OAuthCommunicationException, OAuthExpectationFailedException, OAuthMessageSignerException {

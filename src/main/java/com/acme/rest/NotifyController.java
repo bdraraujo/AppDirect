@@ -34,15 +34,19 @@ public class NotifyController {
 
         try {
             String callbackUrl = url;
-            logger.info("Request Consumer Key: {} %n Request Signature: {}", requestConsumerKey, requestSignature);
+            logger.info("Request Consumer Key: {}", requestConsumerKey);
+            logger.info("Request Signature: {}", requestSignature);
+            logger.info("Request Account Identifier: {}", accountIdentifer);
+
             RequestValidator requestValidator = new RequestValidator(url, requestSignature, consumerKey, secret, callbackUrl);
             if (!requestValidator.isValid()) {
                 return new NotifyResponse(false, "101", "Cannot verify sender, signature mismatch", accountIdentifer);
             }
+
             callbackUrl = requestValidator.sign();
             RestTemplate restTemplate = new RestTemplate();
+            Event event = restTemplate.getForObject(callbackUrl, Event.class);
 
-            Event event = restTemplate.getForObject(callbackUrl, Event.class, (Object) null);
             logger.info("Response from URL: %n {}", event.toString());
         } catch (OAuthExpectationFailedException | OAuthMessageSignerException | OAuthCommunicationException e) {
             logger.error("Error during event processing: {}", e.getLocalizedMessage(), e);

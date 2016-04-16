@@ -1,14 +1,18 @@
 package com.acme.types;
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
+
 /**
  * Created by bdraraujo on 16-04-15.
  */
+@Entity
 public class Event {
     private String returnUrl;
 
     private String flag;
 
-    private Payload payload;
+    private Key<Payload> payload;
 
     private String type;
 
@@ -32,11 +36,11 @@ public class Event {
         this.flag = flag;
     }
 
-    public Payload getPayload() {
+    public Key<Payload> getPayload() {
         return payload;
     }
 
-    public void setPayload(Payload payload) {
+    public void setPayload(Key<Payload> payload) {
         this.payload = payload;
     }
 

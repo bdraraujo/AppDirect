@@ -28,26 +28,32 @@ public class NotifyController {
         final String secret = "secret"; //"CzHCBcYLAWMxpKJl";
 
         try {
-            logger.info("Request Consumer Key: {}%nRequest Signature: {}", requestConsumerKey, requestSignature);
-            OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
-            consumer.setSigningStrategy(new QueryStringSigningStrategy());
-            String signedUrl = consumer.sign(url);
-            logger.info("Signed URL {}", signedUrl);
-            //System.out.println(signedUrl);
+            String callbackUrl = url;
+            logger.info("Request Consumer Key: {} %nRequest Signature: {}", requestConsumerKey, requestSignature);
+            if (url.matches("https:\\/\\/.*-test\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummyOrder")) {
+                logger.info("AppDirect Test URL, retrieving and responding");
+
+
+            } else if (url.matches("https:\\/\\/.*\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummyOrder")) {
+                logger.info("AppDirect Production URL, validating OAuth, retrieving and responding");
+                // TODO Validate OAuth
+                OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
+                consumer.setSigningStrategy(new QueryStringSigningStrategy());
+                callbackUrl = consumer.sign(url);
+                logger.info("Signed URL {}", callbackUrl);
+
+            }
             RestTemplate restTemplate = new RestTemplate();
 
-            String response = restTemplate.getForObject(signedUrl, String.class, (Object) null);
-            logger.info("Response from URL:%n{}", response);
-        } catch (OAuthExpectationFailedException e) {
-            e.printStackTrace();
-        } catch (OAuthMessageSignerException e) {
-            e.printStackTrace();
-        } catch (OAuthCommunicationException e) {
-            e.printStackTrace();
+            String callbackResponse = restTemplate.getForObject(callbackUrl, String.class, (Object) null);
+            logger.info("Response from URL:%n{}", callbackResponse);
+        } catch (OAuthExpectationFailedException | OAuthMessageSignerException | OAuthCommunicationException e) {
+            logger.error("Error during event processing: {}", e.getLocalizedMessage(), e);
+            return new NotifyResponse(false, "100", "Error during event processing", null);
         }
 
         // TODO Print XML
         // Respond to caller
-        return new NotifyResponse(false, "xyz", "Test error", null);
+        return new NotifyResponse(true, null, null, null);
     }
 }

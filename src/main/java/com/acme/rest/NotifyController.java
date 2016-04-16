@@ -1,17 +1,15 @@
 package com.acme.rest;
 
 import com.acme.types.NotifyResponse;
-import com.google.api.client.auth.oauth.OAuthHmacSigner;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.signature.QueryStringSigningStrategy;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -19,24 +17,27 @@ import org.springframework.web.client.RestTemplate;
  */
 @RestController
 public class NotifyController {
+    private static Logger logger = LoggerFactory.getLogger(NotifyController.class);
 
     @RequestMapping(method = RequestMethod.GET, path = "/notify")
-    public NotifyResponse notify(@RequestParam(value = "url") String url) {
+    public NotifyResponse notify(@RequestParam(value = "url") String url,
+                                 @RequestHeader(value = "oauth_consumer_key", defaultValue = "") String requestConsumerKey,
+                                 @RequestHeader(value = "oauth_signature", defaultValue = "") String requestSignature) {
+        // TODO Inject value from property (?)
         final String consumerKey = "Dummy"; //"product-1-105571";
         final String secret = "secret"; //"CzHCBcYLAWMxpKJl";
 
-        // TODO Call AppDirect with signed URL to get XML back
-        OAuthHmacSigner signer = new OAuthHmacSigner();
-        signer.clientSharedSecret = secret;
-
         try {
+            logger.info("Request Consumer Key: {}%nRequest Signature: {}", requestConsumerKey, requestSignature);
             OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
             consumer.setSigningStrategy(new QueryStringSigningStrategy());
             String signedUrl = consumer.sign(url);
-            System.out.println(signedUrl);
+            logger.info("Signed URL {}", signedUrl);
+            //System.out.println(signedUrl);
             RestTemplate restTemplate = new RestTemplate();
+
             String response = restTemplate.getForObject(signedUrl, String.class, (Object) null);
-            System.out.println(response);
+            logger.info("Response from URL:%n{}", response);
         } catch (OAuthExpectationFailedException e) {
             e.printStackTrace();
         } catch (OAuthMessageSignerException e) {

@@ -26,7 +26,7 @@ public class NotifyController {
     private static Logger logger = LoggerFactory.getLogger(NotifyController.class);
 
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
 
     @RequestMapping(method = RequestMethod.GET, path = "/notify")
     public NotifyResponse notify(@RequestParam(value = "url") String url,

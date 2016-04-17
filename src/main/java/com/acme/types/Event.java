@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * Created by bdraraujo on 16-04-15.
@@ -19,12 +21,15 @@ public class Event {
 
     private String flag;
 
+    @OneToOne
     private Payload payload;
 
     private String type;
 
+    @ManyToOne
     private Marketplace marketplace;
 
+    @ManyToOne
     private Creator creator;
 
     public Long getId() {

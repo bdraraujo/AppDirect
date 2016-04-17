@@ -1,9 +1,15 @@
 package com.acme.types;
 
+import com.google.common.base.Joiner;
+
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 /**
  * Created by bdraraujo on 16-04-15.
@@ -16,7 +22,9 @@ public class Order {
 
     private String pricingDuration;
 
-    private Item[] item;
+    @OrderColumn
+    @OneToMany(mappedBy = "order")
+    private List<Item> item;
 
     private String editionCode;
 
@@ -28,11 +36,11 @@ public class Order {
         this.pricingDuration = pricingDuration;
     }
 
-    public Item[] getItem() {
+    public List<Item> getItem() {
         return item;
     }
 
-    public void setItem(Item[] item) {
+    public void setItem(List<Item> item) {
         this.item = item;
     }
 
@@ -46,6 +54,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "ClassPojo [pricingDuration = " + pricingDuration + ", item = " + item + ", editionCode = " + editionCode + "]";
+        return "ClassPojo [pricingDuration = " + pricingDuration + ", item = " + Joiner.on(",").skipNulls().join(item) + ", editionCode = " + editionCode + "]";
     }
 }

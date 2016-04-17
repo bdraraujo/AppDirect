@@ -8,7 +8,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -23,7 +22,6 @@ import javax.persistence.EntityManagerFactory;
 @ComponentScan("com.acme")
 @Configuration
 @EnableAutoConfiguration
-@ImportResource({"classpath*:applicationContext.xml"})
 @EnableJpaRepositories("com.acme.repository")
 @EnableTransactionManagement
 public class Application extends SpringBootServletInitializer {

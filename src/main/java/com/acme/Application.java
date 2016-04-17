@@ -5,15 +5,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.instrument.classloading.LoadTimeWeaver;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.context.annotation.ImportResource;
 
 import java.util.Arrays;
 
@@ -23,8 +17,9 @@ import java.util.Arrays;
 @ComponentScan("com.acme")
 @Configuration
 @EnableAutoConfiguration
-@EnableJpaRepositories("com.acme.repository")
-@EnableTransactionManagement
+@ImportResource({"classpath*:applicationContext.xml"})
+//@EnableJpaRepositories("com.acme.repository")
+//@EnableTransactionManagement
 public class Application extends SpringBootServletInitializer {
 
     @Override
@@ -44,12 +39,23 @@ public class Application extends SpringBootServletInitializer {
         }
     }
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+    /*@Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(LoadTimeWeaver loadTimeWeaver) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setPersistenceUnitName("jpa.unit");
-        emf.setPackagesToScan("com.acme.types");
-        emf.setLoadTimeWeaver(loadTimeWeaverBean());
+
+        //emf.setPersistenceProviderClass(org.datanucleus.api.jpa.PersistenceProviderImpl.class);
+        //Map<String, PersistenceUnitMetaData> puProperties = Maps.newHashMap();
+
+        //PersistenceProviderImpl persistenceProvider = new PersistenceProviderImpl();
+        //EntityManagerFactory emf = persistenceProvider.createEntityManagerFactory("jpa.unit", puProperties);
+        emf.setPersistenceUnitName("jpaunit");
+        //emf.setPackagesToScan("com.acme.types");
+        //emf.setLoadTimeWeaver(loadTimeWeaver);
+        *//*Properties jpaProperties = new Properties();
+        jpaProperties.put("datanucleus.ConnectionURL", "appengine");
+        jpaProperties.put("datanucleus.appengine.ignorableMetaDataBehavior", "NONE");*//*
+        //emf.setJpaProperties(jpaProperties);
+
         return emf;
     }
 
@@ -58,11 +64,11 @@ public class Application extends SpringBootServletInitializer {
         return new org.springframework.instrument.classloading.SimpleLoadTimeWeaver();
     }
 
+
     @Bean
-    public PlatformTransactionManager transactionManager() {
+    JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(
-                entityManagerFactoryBean().getObject());
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
-    }
+    }*/
 }

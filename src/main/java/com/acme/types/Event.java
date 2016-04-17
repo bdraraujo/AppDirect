@@ -1,10 +1,10 @@
 package com.acme.types;
 
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by bdraraujo on 16-04-15.
@@ -26,6 +26,14 @@ public class Event {
     private Marketplace marketplace;
 
     private Creator creator;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getReturnUrl() {
         return returnUrl;
@@ -77,6 +85,6 @@ public class Event {
 
     @Override
     public String toString() {
-        return "ClassPojo [returnUrl = " + returnUrl + ", flag = " + flag + ", payload = " + payload + ", type = " + type + ", marketplace = " + marketplace + ", creator = " + creator + "]";
+        return "Event [id = " + id + ", returnUrl = " + returnUrl + ", flag = " + flag + ", payload = " + payload + ", type = " + type + ", marketplace = " + marketplace + ", creator = " + creator + "]";
     }
 }

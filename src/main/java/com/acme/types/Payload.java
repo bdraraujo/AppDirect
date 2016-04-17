@@ -1,5 +1,6 @@
 package com.acme.types;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,13 +16,13 @@ public class Payload {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Company company;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Configuration configuration;
 
     public Order getOrder() {

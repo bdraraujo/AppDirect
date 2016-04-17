@@ -2,6 +2,7 @@ package com.acme.types;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,7 @@ public class Order {
     private String pricingDuration;
 
     @OrderColumn
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.ALL})
     private List<Item> item;
 
     private String editionCode;

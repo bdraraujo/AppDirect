@@ -1,6 +1,7 @@
 package com.acme.types;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,15 +22,15 @@ public class Event {
 
     private String flag;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Payload payload;
 
     private String type;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Marketplace marketplace;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Creator creator;
 
     public Long getId() {

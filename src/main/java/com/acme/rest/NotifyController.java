@@ -1,5 +1,6 @@
 package com.acme.rest;
 
+import com.acme.repository.EventRepository;
 import com.acme.types.Event;
 import com.acme.types.NotifyResponse;
 
@@ -9,6 +10,7 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +24,9 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class NotifyController {
     private static Logger logger = LoggerFactory.getLogger(NotifyController.class);
+
+    @Autowired
+    EventRepository eventRepository;
 
     @RequestMapping(method = RequestMethod.GET, path = "/notify")
     public NotifyResponse notify(@RequestParam(value = "url") String url,
@@ -48,6 +53,10 @@ public class NotifyController {
             Event event = restTemplate.getForObject(callbackUrl, Event.class);
 
             logger.info("Response from URL: %n {}", event.toString());
+            logger.info("Writting Event to persistent store");
+            event = eventRepository.saveAndFlush(event);
+            logger.info("Generated ID: {}", event.getId());
+
         } catch (OAuthExpectationFailedException | OAuthMessageSignerException | OAuthCommunicationException e) {
             logger.error("Error during event processing: {}", e.getLocalizedMessage(), e);
             return new NotifyResponse(false, "100", "Error during event processing", accountIdentifer);

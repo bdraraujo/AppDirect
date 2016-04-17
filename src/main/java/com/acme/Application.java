@@ -23,7 +23,7 @@ import javax.persistence.EntityManagerFactory;
 @ComponentScan("com.acme")
 @Configuration
 @EntityScan("com.acme.types")
-@EnableAutoConfiguration()
+@EnableAutoConfiguration
 @EnableJpaRepositories("com.acme.repository")
 @EnableTransactionManagement
 public class Application extends SpringBootServletInitializer {

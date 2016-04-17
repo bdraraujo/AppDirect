@@ -22,7 +22,6 @@ public class Company {
 
     private String name;
 
-    @Id
     private String uuid;
 
     private String country;

@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,7 +22,8 @@ import javax.persistence.EntityManagerFactory;
  */
 @ComponentScan("com.acme")
 @Configuration
-@EnableAutoConfiguration
+@EntityScan("com.acme.types")
+@EnableAutoConfiguration()
 @EnableJpaRepositories("com.acme.repository")
 @EnableTransactionManagement
 public class Application extends SpringBootServletInitializer {

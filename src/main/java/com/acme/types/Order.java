@@ -1,7 +1,5 @@
 package com.acme.types;
 
-import com.google.common.base.Joiner;
-
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -10,11 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.Table;
 
 /**
  * Created by bdraraujo on 16-04-15.
  */
 @Entity
+@Table(name = "event_order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +54,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "ClassPojo [pricingDuration = " + pricingDuration + ", item = " + Joiner.on(",").skipNulls().join(item) + ", editionCode = " + editionCode + "]";
+        return "ClassPojo [pricingDuration = " + pricingDuration + ", item = " + item + ", editionCode = " + editionCode + "]";
     }
 }

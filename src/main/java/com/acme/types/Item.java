@@ -1,6 +1,5 @@
 package com.acme.types;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,8 +18,7 @@ public class Item {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    @Column(name = "order_id")
+    @JoinColumn(name = "order_id")
     private Order order;
 
     private String unit;

@@ -6,6 +6,7 @@ import com.acme.types.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,7 +24,7 @@ public class EventController {
     @Autowired
     private EventRepository eventRepository;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/events")
+    @RequestMapping(method = RequestMethod.GET, path = "/events", produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
     public List<Event> eventListing() {
         return eventRepository.findAll();

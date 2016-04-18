@@ -20,13 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EventService {
     @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
     private CreatorRepository creatorRepository;
     @Autowired
     private EventRepository eventRepository;
     @Autowired
     private MarketplaceRepository marketplaceRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
 
     public Event save(Event event) {
         Creator creator = creatorRepository.findOne(event.getCreator().getUuid());
@@ -37,9 +37,11 @@ public class EventService {
         if (marketplace != null) {
             event.setMarketplace(marketplace);
         }
-        Company company = companyRepository.findOne(event.getPayload().getCompany().getUuid());
-        if (company != null) {
-            event.getPayload().setCompany(company);
+        if (event.getPayload().getCompany() != null) {
+            Company company = companyRepository.findOne(event.getPayload().getCompany().getUuid());
+            if (company != null) {
+                event.getPayload().setCompany(company);
+            }
         }
         Event e = eventRepository.saveAndFlush(event);
         return event;

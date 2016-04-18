@@ -29,18 +29,20 @@ public class EventService {
     private MarketplaceRepository marketplaceRepository;
 
     public Event save(Event event) {
-        Creator creator = creatorRepository.findOne(event.getCreator().getUuid());
-        if (creator != null) {
-            event.setCreator(creator);
-        }
-        Marketplace marketplace = marketplaceRepository.findOne(event.getMarketplace().getPartner());
-        if (marketplace != null) {
-            event.setMarketplace(marketplace);
-        }
-        if (event.getPayload().getCompany() != null) {
-            Company company = companyRepository.findOne(event.getPayload().getCompany().getUuid());
-            if (company != null) {
-                event.getPayload().setCompany(company);
+        if (!event.getType().equals("SUBSCRIPTION_NOTICE")) {
+            Creator creator = creatorRepository.findOne(event.getCreator().getUuid());
+            if (creator != null) {
+                event.setCreator(creator);
+            }
+            Marketplace marketplace = marketplaceRepository.findOne(event.getMarketplace().getPartner());
+            if (marketplace != null) {
+                event.setMarketplace(marketplace);
+            }
+            if (event.getPayload().getCompany() != null) {
+                Company company = companyRepository.findOne(event.getPayload().getCompany().getUuid());
+                if (company != null) {
+                    event.getPayload().setCompany(company);
+                }
             }
         }
         Event e = eventRepository.saveAndFlush(event);

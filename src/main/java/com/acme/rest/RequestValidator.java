@@ -39,7 +39,7 @@ public class RequestValidator {
 
     public boolean isValid() throws OAuthMessageSignerException, OAuthExpectationFailedException, OAuthCommunicationException {
         result = true;
-
+        logger.info("Received URL {}", url);
         if (url.matches("https:\\/\\/.*-test\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummy\\.*")) {
             logger.info("AppDirect Test URL, retrieving and responding");
         } else if (url.matches("https:\\/\\/.*\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummy\\.*")) {

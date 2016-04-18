@@ -1,6 +1,6 @@
 package com.acme.rest;
 
-import com.acme.repository.EventRepository;
+import com.acme.service.EventService;
 import com.acme.types.Event;
 import com.acme.types.NotifyResponse;
 
@@ -26,7 +26,7 @@ public class NotifyController {
     private static Logger logger = LoggerFactory.getLogger(NotifyController.class);
 
     @Autowired
-    private EventRepository eventRepository;
+    private EventService eventService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/notify")
     public NotifyResponse notify(@RequestParam(value = "url") String url,
@@ -54,7 +54,7 @@ public class NotifyController {
 
             logger.info("Response from URL: %n {}", event.toString());
             logger.info("Writting Event to persistent store");
-            event = eventRepository.saveAndFlush(event);
+            event = eventService.save(event);
             logger.info("Generated ID: {}", event.getId());
 
         } catch (OAuthExpectationFailedException | OAuthMessageSignerException | OAuthCommunicationException e) {

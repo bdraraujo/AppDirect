@@ -40,9 +40,9 @@ public class RequestValidator {
     public boolean isValid() throws OAuthMessageSignerException, OAuthExpectationFailedException, OAuthCommunicationException {
         result = true;
         logger.info("Received URL {}", url);
-        if (url.matches("https:\\/\\/.*-test\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummy.*")) {
+        if (url.matches(Constants.APPDIRECT_TEST_URL)) {
             logger.info("AppDirect Test URL, retrieving and responding");
-        } else if (url.matches("https:\\/\\/.*\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummy.*")) {
+        } else if (url.matches(Constants.APPDIRECT_PROD_URL)) {
             logger.info("AppDirect Production URL, validating OAuth, retrieving and responding");
 
             // Validate OAuth
@@ -60,10 +60,10 @@ public class RequestValidator {
 
     public String sign() throws OAuthCommunicationException, OAuthExpectationFailedException, OAuthMessageSignerException {
         String signedUrl;
-        if (url.matches("https:\\/\\/.*-test\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummy\\.*")) {
+        if (url.matches(Constants.APPDIRECT_TEST_URL)) {
             logger.info("AppDirect Test URL, returning original URL");
             signedUrl = url;
-        } else if (url.matches("https:\\/\\/.*\\.byappdirect\\.com\\/api\\/integration\\/v1\\/events\\/dummy\\.*")) {
+        } else if (url.matches(Constants.APPDIRECT_PROD_URL)) {
             logger.info("AppDirect Production URL, signing and returning");
             OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, secret);
             consumer.setSigningStrategy(new QueryStringSigningStrategy());
